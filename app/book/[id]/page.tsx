@@ -1,20 +1,17 @@
-import { Suspense, useState } from "react";
-import { Book } from "../interface";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Box,
-  Button,
   Card,
   CardContent,
-  CardMedia,
   CircularProgress,
   Stack,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
 import moment from "moment";
-import { redirect } from "next/navigation";
-import { ArrowBack } from "@mui/icons-material";
+import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+import { Book } from "../interface";
 
 interface Param {
   id: string;
@@ -39,6 +36,15 @@ async function getBooks(params: string) {
   const res = await fetch("https://fakerapi.it/api/v1/books");
   const parsedJson = await res.json();
   const books: Book[] = parsedJson.data;
+
+  const currentBook = books.filter((b) => b.id.toString() === params)[0];
+
+  const res2 = await fetch(currentBook.image);
+  const blob = await res2.blob();
+  if (!blob.type.startsWith("image/")) {
+    currentBook.image = "/not-found.png";
+  }
+
   return books.filter((b) => b.id.toString() === params)[0];
 }
 
@@ -58,11 +64,12 @@ export default async function BookDetails({ params }: { params: Param }) {
               height={100}
               borderRadius={5}
               borderColor={"black"}
+              mb={2}
             >
               <Image
                 alt={details.title}
-                width={50}
-                height={50}
+                width={170}
+                height={100}
                 src={details.image}
               />
             </Box>
