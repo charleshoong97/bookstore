@@ -66,7 +66,15 @@ export default async function BookDetails({ params }: { params: Param }) {
                 src={details.image}
               />
             </Box>
-            <LabelValue label="Title" value={details.title} />
+            <Typography fontWeight={800}>{details.title}</Typography>
+            <Box mb={2}>
+              <Typography
+                variant="caption"
+                sx={{ fontStyle: "italic", color: "grey" }}
+              >
+                `{details.description}`
+              </Typography>
+            </Box>
             <LabelValue label="Author" value={details.author} />
             <LabelValue label="Genre" value={details.genre} />
             <LabelValue label="ISBN" value={details.isbn} />
